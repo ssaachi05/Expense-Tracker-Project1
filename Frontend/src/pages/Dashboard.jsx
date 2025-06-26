@@ -1,8 +1,10 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Clock, PieChart, TrendingDown, TrendingUp } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTransactions } from "../context/TransactionContext";
 
-function Dashboard({transactions}=[]) {
+function Dashboard() {
+  const{ transactions }=useTransactions();
   const [stats, setStats] = useState({
     total: 0,
     income: 0,
@@ -140,7 +142,7 @@ function Dashboard({transactions}=[]) {
           </CardHeader>
           <CardContent>
             <div className={`sub-heading-medium ${stats.balance >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-              ${stats.balance.toLocaleString()}
+              ₹{stats.balance.toLocaleString()}
             </div>
             <p className="text-muted-foreground">
               From {stats.total} transactions
@@ -162,7 +164,7 @@ function Dashboard({transactions}=[]) {
           </CardHeader>
           <CardContent>
             <div className="sub-heading-medium text-green-600">
-              ${stats.income.toLocaleString()}
+              ₹{stats.income.toLocaleString()}
             </div>
             <p className="text-muted-foreground">
               {stats.trend.income >= 0 ? '+' : ''}{stats.trend.income.toFixed(1)}% from last month
@@ -184,7 +186,7 @@ function Dashboard({transactions}=[]) {
           </CardHeader>
           <CardContent>
             <div className="sub-heading-medium text-red-600">
-              ${stats.expenses.toLocaleString()}
+              ₹{stats.expenses.toLocaleString()}
             </div>
             <p className="text-muted-foreground">
               {stats.trend.expenses >= 0 ? '+' : ''}{stats.trend.expenses.toFixed(1)}% from last month
@@ -247,7 +249,7 @@ function Dashboard({transactions}=[]) {
                           : "text-green-500"
                       }`}
                     >
-                      {transaction.type === "expense" ? "-" : "+"}$
+                      {transaction.type === "expense" ? "-" : "+"}₹
                       {Number(transaction.amount).toLocaleString()}
                     </div>
                   </div>

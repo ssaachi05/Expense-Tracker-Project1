@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { useTransactions } from "../context/TransactionContext";
 
-const TransactionList = ({ transactions, deleteTransaction, editTransaction }) => {
+const TransactionList = () => {
+  const{transactions, deleteTransaction, editTransaction }=useTransactions();
   const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState({});
   const [customCategories, setCustomCategories] = useState([]);
@@ -31,7 +33,7 @@ const TransactionList = ({ transactions, deleteTransaction, editTransaction }) =
 
   // Start editing a transaction
   const startEditing = (transaction) => {
-    setEditingId(transaction.id);
+    setEditingId(transaction._id);
     setEditForm({
       description: transaction.description,
       amount: transaction.amount,
@@ -73,12 +75,12 @@ const TransactionList = ({ transactions, deleteTransaction, editTransaction }) =
           <div className="transactions-container">
             {recentTransactions.map((transaction) => (
               <div
-                key={transaction.id}
+                key={transaction._id}
                 className={`transaction-item ${transaction.type}`}
               >
                 <div className="transaction-header sub-container">
                   <span className="amount font-bold">
-                    {editingId === transaction.id ? (
+                    {editingId === transaction._id ? (
                       <input
                         type="number"
                         value={editForm.amount || ''}
@@ -90,7 +92,7 @@ const TransactionList = ({ transactions, deleteTransaction, editTransaction }) =
                     )}
                   </span>
                   <span className={`type ${transaction.type} font-semibold`}>
-                    {editingId === transaction.id ? (
+                    {editingId === transaction._id ? (
                       <select
                         value={editForm.type}
                         onChange={(e) => handleInputChange('type', e.target.value)}
@@ -106,7 +108,7 @@ const TransactionList = ({ transactions, deleteTransaction, editTransaction }) =
                 </div>
                 <div className="transaction-details">
                   <p className="description font-semibold">
-                    {editingId === transaction.id ? (
+                    {editingId === transaction._id ? (
                       <input
                         type="text"
                         value={editForm.description || ''}
@@ -118,7 +120,7 @@ const TransactionList = ({ transactions, deleteTransaction, editTransaction }) =
                     )}
                   </p>
                   <p className="category text-sm text-muted-foreground font-semibold">
-                    Category: {editingId === transaction.id ? (
+                    Category: {editingId === transaction._id ? (
                       <select
                         value={editForm.category || 'General'}
                         onChange={(e) => handleInputChange('category', e.target.value)}
@@ -144,11 +146,11 @@ const TransactionList = ({ transactions, deleteTransaction, editTransaction }) =
                   </p>
                 </div>
                 <div className="transaction-actions" style={{ marginTop: "10px", display: "flex", gap: "10px" }}>
-                  {editingId === transaction.id ? (
+                  {editingId === transaction._id ? (
                     <>
                       <button 
                         className="save-button" 
-                        onClick={() => saveEdit(transaction.id)}
+                        onClick={() => saveEdit(transaction._id)}
                         style={{ fontSize: "12px", padding: "6px 12px", backgroundColor: "#4CAF50", color: "white", border: "none", borderRadius: "4px", cursor: "pointer" }}
                       >
                         ✓ Save
@@ -172,7 +174,7 @@ const TransactionList = ({ transactions, deleteTransaction, editTransaction }) =
                       </button>
                       <button 
                         className="delete-button" 
-                        onClick={() => deleteTransaction(transaction.id)}
+                        onClick={() => deleteTransaction(transaction._id)}
                         style={{ fontSize: "12px", padding: "6px 12px", cursor: "pointer" }}
                       >
                         🗑 Delete
